@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Data
 @Entity
 class Transaction {
@@ -16,6 +18,7 @@ class Transaction {
     // TODO: add field validations
     private @Id @GeneratedValue Long id; 
     private String accountNumber; 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss.SSS")
     private Date date;
     private String beneficiary; 
     private String comment; 
@@ -31,5 +34,5 @@ class Transaction {
         this.comment = comment;
         this.amount = amount;
         this.currency = currency;
-  }
+    }
 }
