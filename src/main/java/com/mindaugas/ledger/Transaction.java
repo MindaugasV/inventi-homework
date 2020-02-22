@@ -1,6 +1,8 @@
 package com.mindaugas.ledger;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.math.BigDecimal;
 
 import lombok.Data;
@@ -27,8 +29,8 @@ class Transaction {
 
     Transaction() {}
 
-    Transaction(String accountNUmber, Date date, String beneficiary, String comment, BigDecimal amount, String currency) {
-        this.accountNumber = accountNUmber;
+    Transaction(String accountNumber, Date date, String beneficiary, String comment, BigDecimal amount, String currency) {
+        this.accountNumber = accountNumber;
         this.date = date;
         this.beneficiary = beneficiary;
         this.comment = comment;
