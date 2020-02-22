@@ -13,6 +13,7 @@ import javax.persistence.Id;
 @Entity
 class Transaction {
     // TODO: add mandatory, optional annotations
+    // TODO: add field validations
     private @Id @GeneratedValue Long id; 
     private String accountNumber; 
     private Date date;
