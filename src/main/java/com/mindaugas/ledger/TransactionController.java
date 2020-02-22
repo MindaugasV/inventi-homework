@@ -3,9 +3,12 @@ package com.mindaugas.ledger;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
@@ -33,7 +36,7 @@ class TransactionController {
     public void exportTransactions(HttpServletResponse response) throws IOException {
 
         List<Transaction> listOfTransactions = repository.findAll();
-        
+
         response.setContentType("text/csv");
         // Configure headers
         String csvFileName = "report.csv"; 
@@ -52,5 +55,14 @@ class TransactionController {
             csvWriter.write(aTransaction.csvParams());
         }
         csvWriter.close();
-	}
+    }
+    
+    @PostMapping("/transactions/import")
+    public String importTransactions(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+
+		redirectAttributes.addFlashAttribute("message",
+				"You successfully uploaded " + file.getOriginalFilename() + "!");
+
+		return "redirect:/";
+    }
 }
