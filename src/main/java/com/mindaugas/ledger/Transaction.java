@@ -37,4 +37,22 @@ class Transaction {
         this.amount = amount;
         this.currency = currency;
     }
+
+    public static String[] csvHeaderAnnotation() {
+        String[] headers = { "accountNumber", "date", "beneficiary", "comment", "amount", "currency" };
+        return headers;
+    }
+
+    public List<String> csvParams() {
+        List<String> list = new ArrayList<String>();
+
+        list.add(accountNumber.toString());
+        list.add(date.toString());
+        list.add(beneficiary.toString());
+        list.add(comment.toString());
+        list.add(amount.toString());
+        list.add(currency.toString());
+
+        return list;
+    }
 }
