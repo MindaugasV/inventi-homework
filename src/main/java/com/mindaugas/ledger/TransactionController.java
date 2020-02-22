@@ -1,16 +1,20 @@
 package com.mindaugas.ledger;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvListWriter;
+import org.supercsv.io.CsvMapReader;
 import org.supercsv.io.ICsvListWriter;
+import org.supercsv.io.ICsvMapReader;
 import org.supercsv.prefs.CsvPreference;
 
 @RestController
@@ -58,11 +62,22 @@ class TransactionController {
     }
     
     @PostMapping("/transactions/import")
-    public String importTransactions(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+    public void importTransactions(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
 
-		redirectAttributes.addFlashAttribute("message",
-				"You successfully uploaded " + file.getOriginalFilename() + "!");
+        ICsvMapReader listReader = new CsvMapReader(new InputStreamReader(file.getInputStream()), CsvPreference.STANDARD_PREFERENCE);      
 
-		return "redirect:/";
+        //First Column is header names
+        final String[] headers = listReader.getHeader(true);
+        final CellProcessor[] processors = Transaction.getProcessors();
+
+        Map<String, Object> fieldsInCurrentRow;
+        while ((fieldsInCurrentRow = listReader.read(headers, processors)) != null) {
+            Transaction newTransaction = new Transaction(fieldsInCurrentRow);
+            repository.save(newTransaction);
+        }
+        listReader.close();
+        
+        redirectAttributes.addFlashAttribute("message", 
+                "You successfully uploaded " + file.getOriginalFilename() + "!");
     }
 }
