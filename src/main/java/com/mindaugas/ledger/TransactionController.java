@@ -2,6 +2,7 @@ package com.mindaugas.ledger;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -96,5 +97,28 @@ class TransactionController {
         
         redirectAttributes.addFlashAttribute("message", 
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
+    }
+
+    @GetMapping("/account/{accountNumber}/balance")
+    String balance(@PathVariable String accountNumber,
+        @RequestParam (name="from", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") Date fromDate,
+        @RequestParam (name="to", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") Date toDate
+    ) {
+        List<Transaction> transactions;
+        if (fromDate != null && toDate != null) {
+            transactions = repository.findByAccountNumberAndDateAfterAndDateBefore(accountNumber, fromDate, toDate);
+        } else if (fromDate != null) {
+            transactions = repository.findByAccountNumberAndDateAfter(accountNumber, fromDate);
+        } else if (toDate != null) {
+            transactions = repository.findByAccountNumberAndDateBefore(accountNumber, toDate);
+        } else {
+            transactions = repository.findByAccountNumber(accountNumber);
+        }
+
+        BigDecimal balance = new BigDecimal(0);
+        for (Transaction transaction : transactions) {
+            balance = balance.add(transaction.getAmount());
+        }
+        return balance.toString();
     }
 }
