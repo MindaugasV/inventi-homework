@@ -2,11 +2,13 @@ package com.mindaugas.ledger;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -37,12 +39,24 @@ class TransactionController {
     }
 
     @GetMapping("/transactions/export")
-    public void exportTransactions(HttpServletResponse response) throws IOException {
+    public void exportTransactions(HttpServletResponse response,
+        @RequestParam (name="from", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") Date fromDate,
+        @RequestParam (name="to", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") Date toDate
+    ) throws IOException {
 
-        List<Transaction> listOfTransactions = repository.findAll();
+        List<Transaction> listOfTransactions;
+        if (fromDate != null && toDate != null) {
+            listOfTransactions = repository.findByDateAfterAndDateBefore(fromDate, toDate);
+        } else if (fromDate != null) {
+            listOfTransactions = repository.findByDateAfter(fromDate);
+        } else if (toDate != null) {
+            listOfTransactions = repository.findByDateBefore(toDate);
+        } else {
+            listOfTransactions = repository.findAll();
+        }
 
+        // Configure Response
         response.setContentType("text/csv");
-        // Configure headers
         String csvFileName = "report.csv"; 
         String headerKey = "Content-Disposition";
         String headerValue = String.format("attachment; filename=\"%s\"",
@@ -50,6 +64,9 @@ class TransactionController {
         response.setHeader(headerKey, headerValue);
  
         // uses the Super CSV API to generate CSV data from the model data
+        // Chose to us ListWriter, Because BeanWriter was catching exception of Illegal access.
+        // It happend because Transaction property was accessed from diferent package and it was considered illegal.
+        // Therefore here sticking with ListWriter
         ICsvListWriter csvWriter = new CsvListWriter(response.getWriter(),
                 CsvPreference.STANDARD_PREFERENCE);
 
