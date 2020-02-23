@@ -45,6 +45,7 @@ class Transaction {
         this.currency = currency;
     }
 
+    // ################################################
     // CSV Handling
 
     public static String[] csvHeaderAnnotation() {
@@ -65,9 +66,8 @@ class Transaction {
         return list;
     }
 
-    /**
-     * CSV line processor for transaction
-     */
+    
+    // CSV line processor for transaction 
     public static CellProcessor[] getProcessors() {
         final CellProcessor[] processors = new CellProcessor[] {
                 new NotNull(), // AccountNumber
