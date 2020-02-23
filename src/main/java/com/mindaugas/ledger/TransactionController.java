@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -100,7 +101,7 @@ class TransactionController {
     }
 
     @GetMapping("/account/{accountNumber}/balance")
-    String balance(@PathVariable String accountNumber,
+    Balance balance(@PathVariable String accountNumber,
         @RequestParam (name="from", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") Date fromDate,
         @RequestParam (name="to", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") Date toDate
     ) {
@@ -119,6 +120,14 @@ class TransactionController {
         for (Transaction transaction : transactions) {
             balance = balance.add(transaction.getAmount());
         }
-        return balance.toString();
+        balance.toString();
+
+        Balance balanceDTO = new Balance();
+        balanceDTO.setAccountNumber(accountNumber);
+        Map<String, BigDecimal> map = new HashMap<String, BigDecimal>();
+        map.put("LTL", balance);
+        balanceDTO.setBalances(map);
+
+        return balanceDTO;
     }
 }
