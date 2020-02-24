@@ -15,7 +15,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(TransactionController.class)
-class LedgerApplicationTests {
+class TransactionControllerTests {
 
 	@Autowired
 	private MockMvc mockMvc;
