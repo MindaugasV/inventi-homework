@@ -1,5 +1,10 @@
 # inventi-homework
 
+## Notes on homework
+- I assume that credit/debit operations are indicated by the amount being negative/postive. Would not check beneficiery field to calc balance.
+- I choose that balance will be calculated seperatly for each currency and will return seperate line for each. 
+- Regarding commits - I made all commits to master. Regulary I would user feature branch'es and cleanup, squash commits when needed. 
+
 ## How to run
 To run execute command in project root:
 ```
@@ -115,25 +120,20 @@ POST Body example:
 ## HouseKeeping
 - [x] Instructions how to run a project
 - [x] API documentation
-- [ ] Tests
-- [ ] Remove intial load and try adding/importing new transactions
-- [ ] Consider refactoring where needed
-- [ ] Consider changing to persistant DB
+- [x] Tests
+- [x] Remove intial load and try adding/importing new transactions
+- [x] Consider refactoring where needed
 - [ ] Check any DEBUG flags before ready to prod
  
 ## Business logic
-- I assume that credit/debit operations are indicated by the amount being negative/postive. Would not check beneficiery field to calc balance.
-- I choose that balance will be calculated seperatly for each currency and will return seperate line for each. 
-- [ ] import from CSV
+- [x] import from CSV
     - [x] Import & save
-    - [ ] Test optional comment
-    - [ ] What happens if format doesn't match in lines?
-    - [ ] Double check negative amount values.
-- [ ] export to CSV
+    - [x] Test optional comment
+    - [x] What happens if format doesn't match in lines?
+    - [x] Double check negative amount values.
+- [x] export to CSV
     - [x] simple export all existing data in database
     - [x] filter export by params, date
-    - [ ] Sort? 
-    - [ ] pageination? or limiting the number of entries? perform? 
 - [x] endpoint for account balance
     - [x] Simple plain fetch all and add numbers
     - [x] Filter by account
