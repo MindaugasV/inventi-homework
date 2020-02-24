@@ -102,7 +102,7 @@ Crate a new transaction form given data.
 POST Body example:
 ```
 {
-	"accountNumber": "Post:123",
+    "accountNumber": "Post:123",
     "date": "2020-02-22 15:11:10.793",
     "beneficiary": "Post:456",
     "comment": "Well thats about it",
@@ -134,10 +134,9 @@ POST Body example:
     - [x] filter export by params, date
     - [ ] Sort? 
     - [ ] pageination? or limiting the number of entries? perform? 
-- [ ] endpoint for account balance
+- [x] endpoint for account balance
     - [x] Simple plain fetch all and add numbers
     - [x] Filter by account
     - [x] Filter by date
     - [x] Add currency consideration. Update docs.
-    - [ ] Double check negative amount values.
-    - [ ] Consider beneficieries? Depends on the approach of how i deal with credit/debit. 
+    - [x] Double check negative amount values.
