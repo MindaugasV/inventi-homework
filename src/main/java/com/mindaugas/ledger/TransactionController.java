@@ -116,7 +116,7 @@ class TransactionController {
             transactions = repository.findByAccountNumber(accountNumber);
         }
 
-        BigDecimal balance = new BigDecimal(0);
+        BigDecimal balance = BigDecimal.ZERO;
         for (Transaction transaction : transactions) {
             balance = balance.add(transaction.getAmount());
         }
