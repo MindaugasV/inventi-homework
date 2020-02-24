@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 
 import lombok.Data;
 
@@ -59,8 +60,10 @@ class Transaction {
     public List<String> csvParams() {
         List<String> list = new ArrayList<String>();
 
+		SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
+
         list.add(accountNumber.toString());
-        list.add(date.toString());
+        list.add(formatter.format(date));
         list.add(beneficiary.toString());
         list.add(comment.toString());
         list.add(amount.toString());
