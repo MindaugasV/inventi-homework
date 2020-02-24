@@ -101,4 +101,49 @@ class TransactionControllerTests {
 					.andExpect(content().contentType("text/csv"))
 					.andExpect(content().string(expectedFileString));
 	}
+
+	@Test
+	void transactionExportWithFromParamShouldFilterDatabase() throws Exception {
+		String expectedFileString = "accountNumber,date,beneficiary,comment,amount,currency\r\nLT12312,2020-02-20 02:12:54.934,LT1231,,2.00,LTL\r\n";
+
+		Transaction expectedTransaction = new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.00"), "LTL");
+		List<Transaction> expectedTransactions = new ArrayList<Transaction>();
+		Collections.addAll(expectedTransactions, expectedTransaction);
+		when(repository.findByDateAfter(any())).thenReturn(expectedTransactions);
+
+		this.mockMvc.perform(get("/transactions/export").param("from", "2020-02-20"))
+					.andExpect(status().isOk())
+					.andExpect(content().contentType("text/csv"))
+					.andExpect(content().string(expectedFileString));
+	}
+
+	@Test
+	void transactionExportWithToParamShouldFilterDatabase() throws Exception {
+		String expectedFileString = "accountNumber,date,beneficiary,comment,amount,currency\r\nLT12312,2020-02-20 02:12:54.934,LT1231,,2.00,LTL\r\n";
+
+		Transaction expectedTransaction = new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.00"), "LTL");
+		List<Transaction> expectedTransactions = new ArrayList<Transaction>();
+		Collections.addAll(expectedTransactions, expectedTransaction);
+		when(repository.findByDateBefore(any())).thenReturn(expectedTransactions);
+
+		this.mockMvc.perform(get("/transactions/export").param("to", "2020-02-20"))
+					.andExpect(status().isOk())
+					.andExpect(content().contentType("text/csv"))
+					.andExpect(content().string(expectedFileString));
+	}
+
+	@Test
+	void transactionExportWithFromAndToParamShouldFilterDatabase() throws Exception {
+		String expectedFileString = "accountNumber,date,beneficiary,comment,amount,currency\r\nLT12312,2020-02-20 02:12:54.934,LT1231,,2.00,LTL\r\n";
+
+		Transaction expectedTransaction = new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.00"), "LTL");
+		List<Transaction> expectedTransactions = new ArrayList<Transaction>();
+		Collections.addAll(expectedTransactions, expectedTransaction);
+		when(repository.findByDateAfterAndDateBefore(any(), any())).thenReturn(expectedTransactions);
+
+		this.mockMvc.perform(get("/transactions/export").param("to", "2020-02-20").param("from", "2020-02-19"))
+					.andExpect(status().isOk())
+					.andExpect(content().contentType("text/csv"))
+					.andExpect(content().string(expectedFileString));
+	}
 }
