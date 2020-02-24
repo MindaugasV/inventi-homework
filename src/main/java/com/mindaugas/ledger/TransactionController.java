@@ -115,19 +115,8 @@ class TransactionController {
         } else {
             transactions = repository.findByAccountNumber(accountNumber);
         }
-
-        BigDecimal balance = BigDecimal.ZERO;
-        for (Transaction transaction : transactions) {
-            balance = balance.add(transaction.getAmount());
-        }
-        balance.toString();
-
-        Balance balanceDTO = new Balance();
-        balanceDTO.setAccountNumber(accountNumber);
-        Map<String, BigDecimal> map = new HashMap<String, BigDecimal>();
-        map.put("LTL", balance);
-        balanceDTO.setBalances(map);
-
-        return balanceDTO;
+        
+        Balance balance = BalanceCalculator.balanceFromTransactions(transactions, accountNumber);
+        return balance;
     }
 }
