@@ -146,4 +146,88 @@ class TransactionControllerTests {
 					.andExpect(content().contentType("text/csv"))
 					.andExpect(content().string(expectedFileString));
 	}
+
+	@Test
+	void accountBalanceShouldReturnTransactionAmountFromDatabase() throws Exception {
+		String expectedBalanceJSON = "{\"accountNumber\": \"LT12312\",\"balances\":{\"LTL\":2.00}}";
+
+		Transaction expectedTransaction = new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.00"), "LTL");
+		List<Transaction> expectedTransactions = new ArrayList<Transaction>();
+		Collections.addAll(expectedTransactions, expectedTransaction);
+		when(repository.findByAccountNumber(any())).thenReturn(expectedTransactions);
+
+		this.mockMvc.perform(get("/account/LT12312/balance"))
+					.andExpect(status().isOk())
+					.andExpect(content().json(expectedBalanceJSON));
+	}
+
+	@Test
+	void accountBalanceShouldReturnSumOfTransactionsFromDatabase() throws Exception {
+		String expectedBalanceJSON = "{\"accountNumber\": \"LT12312\",\"balances\":{\"LTL\":4.50}}";
+
+		List<Transaction> expectedTransactions = new ArrayList<Transaction>();
+		Collections.addAll(expectedTransactions, new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.00"), "LTL"));
+		Collections.addAll(expectedTransactions, new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.50"), "LTL"));
+		when(repository.findByAccountNumber(any())).thenReturn(expectedTransactions);
+
+		this.mockMvc.perform(get("/account/LT12312/balance"))
+					.andExpect(status().isOk())
+					.andExpect(content().json(expectedBalanceJSON));
+	}
+
+	@Test
+	void accountBalanceShouldReturnMultipleCurrencyBalancesOfTransactionsFromDatabase() throws Exception {
+		String expectedBalanceJSON = "{\"accountNumber\": \"LT12312\",\"balances\":{\"EUR\":2.5,\"LTL\":2}}";
+
+		List<Transaction> expectedTransactions = new ArrayList<Transaction>();
+		Collections.addAll(expectedTransactions, new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.00"), "LTL"));
+		Collections.addAll(expectedTransactions, new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.50"), "EUR"));
+		when(repository.findByAccountNumber(any())).thenReturn(expectedTransactions);
+
+		this.mockMvc.perform(get("/account/LT12312/balance"))
+					.andExpect(status().isOk())
+					.andExpect(content().json(expectedBalanceJSON));
+	}
+
+	@Test
+	void accountBalanceShouldFilterTransactionsFromDatabaseByFromDate() throws Exception {
+		String expectedBalanceJSON = "{\"accountNumber\": \"LT12312\",\"balances\":{\"EUR\":2.5,\"LTL\":2}}";
+
+		List<Transaction> expectedTransactions = new ArrayList<Transaction>();
+		Collections.addAll(expectedTransactions, new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.00"), "LTL"));
+		Collections.addAll(expectedTransactions, new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.50"), "EUR"));
+		when(repository.findByAccountNumberAndDateAfter(any(), any())).thenReturn(expectedTransactions);
+
+		this.mockMvc.perform(get("/account/LT12312/balance").param("from", "2020-02-20"))
+					.andExpect(status().isOk())
+					.andExpect(content().json(expectedBalanceJSON));
+	}
+
+	@Test
+	void accountBalanceShouldFilterTransactionsFromDatabaseByToDate() throws Exception {
+		String expectedBalanceJSON = "{\"accountNumber\": \"LT12312\",\"balances\":{\"EUR\":2.5,\"LTL\":2}}";
+
+		List<Transaction> expectedTransactions = new ArrayList<Transaction>();
+		Collections.addAll(expectedTransactions, new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.00"), "LTL"));
+		Collections.addAll(expectedTransactions, new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.50"), "EUR"));
+		when(repository.findByAccountNumberAndDateBefore(any(), any())).thenReturn(expectedTransactions);
+
+		this.mockMvc.perform(get("/account/LT12312/balance").param("to", "2020-02-20"))
+					.andExpect(status().isOk())
+					.andExpect(content().json(expectedBalanceJSON));
+	}
+
+	@Test
+	void accountBalanceShouldFilterTransactionsFromDatabaseByToAndFromDate() throws Exception {
+		String expectedBalanceJSON = "{\"accountNumber\": \"LT12312\",\"balances\":{\"EUR\":2.5,\"LTL\":2}}";
+
+		List<Transaction> expectedTransactions = new ArrayList<Transaction>();
+		Collections.addAll(expectedTransactions, new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.00"), "LTL"));
+		Collections.addAll(expectedTransactions, new Transaction("LT12312", dateFromString("2020-02-20 02:12:54.934"), "LT1231", "", new BigDecimal("2.50"), "EUR"));
+		when(repository.findByAccountNumberAndDateAfterAndDateBefore(any(), any(), any())).thenReturn(expectedTransactions);
+
+		this.mockMvc.perform(get("/account/LT12312/balance").param("to", "2020-02-20").param("from", "2020-02-18"))
+					.andExpect(status().isOk())
+					.andExpect(content().json(expectedBalanceJSON));
+	}
 }
