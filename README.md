@@ -115,28 +115,3 @@ POST Body example:
     "currency": "LTL"
 }
 ```
-
-# TODO:
-## HouseKeeping
-- [x] Instructions how to run a project
-- [x] API documentation
-- [x] Tests
-- [x] Remove intial load and try adding/importing new transactions
-- [x] Consider refactoring where needed
-- [ ] Check any DEBUG flags before ready to prod
- 
-## Business logic
-- [x] import from CSV
-    - [x] Import & save
-    - [x] Test optional comment
-    - [x] What happens if format doesn't match in lines?
-    - [x] Double check negative amount values.
-- [x] export to CSV
-    - [x] simple export all existing data in database
-    - [x] filter export by params, date
-- [x] endpoint for account balance
-    - [x] Simple plain fetch all and add numbers
-    - [x] Filter by account
-    - [x] Filter by date
-    - [x] Add currency consideration. Update docs.
-    - [x] Double check negative amount values.
