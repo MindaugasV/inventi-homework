@@ -28,10 +28,10 @@ GET /transactions/export
 ```
 Outputs CSV file
 
-__Parameteres__
-User can specify date params to URL as a request param. Example `/transactions/export?from=2020-02-20&to=2020-02-22` 
-__from__ - Optional, Date. Tells to include transactions only from given date. Format yyyy-MM-dd
-__to__ - Optional, Date. Tells to include transactions only before given date. Format yyyy-MM-dd
+__Parameteres__\
+User can specify date params to URL as a request param. Example `/transactions/export?from=2020-02-20&to=2020-02-22`\
+__from__ - Optional, Date. Tells to include transactions only from given date. Format yyyy-MM-dd\
+__to__ - Optional, Date. Tells to include transactions only before given date. Format yyyy-MM-dd\
 
 Output example:
 ```
@@ -46,11 +46,11 @@ GET /account/{accountNumber}/balance
 ```
 Returns balance for requested accountNumber
 
-__Parameters__
-__accountNumber__ - URL param. Required. Account number for which we want to know account balance.
-User can specify date params to URL as a request param. Example `/account/{accountNumber}/balance?from=2020-02-20&to=2020-02-22` 
-__from__ - Optional, Date. Tells to include transactions only from given date. Format yyyy-MM-dd
-__to__ - Optional, Date. Tells to include transactions only before given date. Format yyyy-MM-dd
+__Parameters__\
+__accountNumber__ - URL param. Required. Account number for which we want to know account balance.\
+User can specify date params to URL as a request param. Example `/account/{accountNumber}/balance?from=2020-02-20&to=2020-02-22`\
+__from__ - Optional, Date. Tells to include transactions only from given date. Format yyyy-MM-dd\
+__to__ - Optional, Date. Tells to include transactions only before given date. Format yyyy-MM-dd\
 
 Ouput example:
 ```
