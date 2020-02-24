@@ -23,11 +23,14 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 @Data
 @Entity
 class Transaction {
+
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+    
     // TODO: add mandatory, optional annotations
     // TODO: add field validations
     private @Id @GeneratedValue Long id; 
     private String accountNumber; 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonFormat(pattern=DATE_FORMAT)
     private Date date;
     private String beneficiary; 
     private String comment; 
@@ -71,7 +74,7 @@ class Transaction {
     public static CellProcessor[] getProcessors() {
         final CellProcessor[] processors = new CellProcessor[] {
                 new NotNull(), // AccountNumber
-                new NotNull(new ParseDate("yyyy-MM-dd HH:mm:ss.SSS")), // Date
+                new NotNull(new ParseDate(DATE_FORMAT)), // Date
                 new NotNull(), // Beneficiary
                 new Optional(), // Comment
                 new Optional(new ParseBigDecimal()), // Amount

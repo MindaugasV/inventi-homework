@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.NestedServletException;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.CsvMapReader;
@@ -79,7 +80,7 @@ class TransactionController {
     }
     
     @PostMapping("/transactions/import")
-    public void importTransactions(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
+    public void importTransactions(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException, NestedServletException {
 
         ICsvMapReader listReader = new CsvMapReader(new InputStreamReader(file.getInputStream()), CsvPreference.STANDARD_PREFERENCE);      
 
