@@ -54,7 +54,13 @@ __to__ - Optional, Date. Tells to include transactions only before given date. F
 
 Ouput example:
 ```
-12.23
+{
+    "accountNumber": "LT12312",
+    "balances": {
+        "EUR": 3.39,
+        "LTL": 25.60
+    }
+}
 ```
 
 ## Extra Get transactions
@@ -132,6 +138,6 @@ POST Body example:
     - [x] Simple plain fetch all and add numbers
     - [x] Filter by account
     - [x] Filter by date
-    - [ ] Add currency consideration. Update docs.
+    - [x] Add currency consideration. Update docs.
     - [ ] Double check negative amount values.
     - [ ] Consider beneficieries? Depends on the approach of how i deal with credit/debit. 
