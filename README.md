@@ -4,6 +4,7 @@
 - I assume that credit/debit operations are indicated by the amount being negative/postive. Would not check beneficiery field to calc balance.
 - I choose that balance will be calculated seperatly for each currency and will return seperate line for each. 
 - Regarding commits - I made all commits to master. Regulary I would user feature branch'es and cleanup, squash commits when needed. 
+- Deployd to Heroku for testing: https://inventi-homework.herokuapp.com/
 
 ## How to run
 To run execute command in project root:
